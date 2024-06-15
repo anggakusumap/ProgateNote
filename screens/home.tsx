@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, StyleSheet, View, Text } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../components/customButton'
 
 interface Note {
@@ -11,14 +11,16 @@ interface Note {
 interface NoteCardProps {
     item: Note;
     setCurrentPage: (page: string) => void;
+    setSelectedNote: (note: Note | null) => void;
 }
 
 interface HomeProps {
     noteList: Note[];
     setCurrentPage: (page: string) => void;
+    setSelectedNote: (note: Note | null) => void;
 }
 
-const NoteCard = ({ item, setCurrentPage }: NoteCardProps) => (
+const NoteCard = ({ item, setCurrentPage, setSelectedNote }: NoteCardProps) => (
     <View style={styles.card}>
         <Text style={styles.cardTitle}>{item.title}</Text>
         <Text>{item.desc}</Text>
@@ -29,7 +31,10 @@ const NoteCard = ({ item, setCurrentPage }: NoteCardProps) => (
                 text="Ubah"
                 fontSize={12}
                 width={100}
-                onPress={() => { setCurrentPage('edit') }}
+                onPress={() => {
+                    setSelectedNote(item);
+                    setCurrentPage('edit');
+                }}
             />
             <CustomButton
                 backgroundColor="#D82148"
@@ -43,7 +48,7 @@ const NoteCard = ({ item, setCurrentPage }: NoteCardProps) => (
     </View>
 )
 
-const Home = ({ noteList, setCurrentPage }: HomeProps) => (
+const Home = ({ noteList, setCurrentPage, setSelectedNote }: HomeProps) => (
     <View style={styles.container}>
         <CustomButton
             backgroundColor="#DDD"
@@ -57,7 +62,11 @@ const Home = ({ noteList, setCurrentPage }: HomeProps) => (
             showsVerticalScrollIndicator={false}
             data={noteList}
             renderItem={({ item }) => (
-                <NoteCard item={item} setCurrentPage={setCurrentPage} />
+                <NoteCard
+                    item={item}
+                    setCurrentPage={setCurrentPage}
+                    setSelectedNote={setSelectedNote}
+                />
             )}
         />
     </View>
