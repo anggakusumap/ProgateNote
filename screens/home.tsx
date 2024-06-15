@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, View, Text } from 'react-native'
 import CustomButton from '../components/customButton'
 
 interface Note {
@@ -12,15 +12,17 @@ interface NoteCardProps {
     item: Note;
     setCurrentPage: (page: string) => void;
     setSelectedNote: (note: Note | null) => void;
+    deleteNote: (id: number) => void;
 }
 
 interface HomeProps {
     noteList: Note[];
     setCurrentPage: (page: string) => void;
     setSelectedNote: (note: Note | null) => void;
+    deleteNote: (id: number) => void;
 }
 
-const NoteCard = ({ item, setCurrentPage, setSelectedNote }: NoteCardProps) => (
+const NoteCard = ({ item, setCurrentPage, setSelectedNote, deleteNote }: NoteCardProps) => (
     <View style={styles.card}>
         <Text style={styles.cardTitle}>{item.title}</Text>
         <Text>{item.desc}</Text>
@@ -42,13 +44,13 @@ const NoteCard = ({ item, setCurrentPage, setSelectedNote }: NoteCardProps) => (
                 text="Hapus"
                 fontSize={12}
                 width={100}
-                onPress={() => { }}
+                onPress={() => deleteNote(item.id)}
             />
         </View>
     </View>
 )
 
-const Home = ({ noteList, setCurrentPage, setSelectedNote }: HomeProps) => (
+const Home = ({ noteList, setCurrentPage, setSelectedNote, deleteNote }: HomeProps) => (
     <View style={styles.container}>
         <CustomButton
             backgroundColor="#DDD"
@@ -66,8 +68,10 @@ const Home = ({ noteList, setCurrentPage, setSelectedNote }: HomeProps) => (
                     item={item}
                     setCurrentPage={setCurrentPage}
                     setSelectedNote={setSelectedNote}
+                    deleteNote={deleteNote}
                 />
             )}
+            keyExtractor={item => item.id.toString()}
         />
     </View>
 )
@@ -100,4 +104,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Home
+export default Home;

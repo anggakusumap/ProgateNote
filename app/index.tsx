@@ -15,21 +15,22 @@ interface CurrentPageWidgetProps {
     setCurrentPage: (page: string) => void;
     addNote: (title: string, desc: string) => void;
     editNote: (id: number, title: string, desc: string) => void;
+    deleteNote: (id: number) => void;
     selectedNote: Note | null;
     setSelectedNote: (note: Note | null) => void;
 }
 
-const CurrentPageWidget = ({ currentPage, noteList, setCurrentPage, addNote, editNote, selectedNote, setSelectedNote }: CurrentPageWidgetProps) => {
+const CurrentPageWidget = ({ currentPage, noteList, setCurrentPage, addNote, editNote, deleteNote, selectedNote, setSelectedNote }: CurrentPageWidgetProps) => {
     switch (currentPage)
     {
         case 'home':
-            return <Home noteList={noteList} setCurrentPage={setCurrentPage} setSelectedNote={setSelectedNote} />;
+            return <Home noteList={noteList} setCurrentPage={setCurrentPage} setSelectedNote={setSelectedNote} deleteNote={deleteNote} />;
         case 'add':
             return <AddNote setCurrentPage={setCurrentPage} addNote={addNote} />;
         case 'edit':
             return <EditNote setCurrentPage={setCurrentPage} editNote={editNote} selectedNote={selectedNote} />;
         default:
-            return <Home noteList={[]} setCurrentPage={setCurrentPage} setSelectedNote={setSelectedNote} />; // Assuming Home can handle an empty list
+            return <Home noteList={[]} setCurrentPage={setCurrentPage} setSelectedNote={setSelectedNote} deleteNote={deleteNote} />; // Assuming Home can handle an empty list
     }
 };
 
@@ -57,6 +58,10 @@ const App = () => {
         );
     };
 
+    const deleteNote = (id: number) => {
+        setNoteList(noteList.filter(note => note.id !== id));
+    };
+
     return (
         <CurrentPageWidget
             currentPage={currentPage}
@@ -64,6 +69,7 @@ const App = () => {
             noteList={noteList}
             addNote={addNote}
             editNote={editNote}
+            deleteNote={deleteNote}
             selectedNote={selectedNote}
             setSelectedNote={setSelectedNote}
         />
